@@ -64,6 +64,15 @@ void get_node(int i, Node *tree){
 }
 
 
+void print_inorder(Node *tree){
+	if (tree != NULL){
+		print_inorder(tree->ptrLeft);
+		printf("%d ", tree->value);
+		print_inorder(tree->ptrRight);
+	}
+}
+
+
 int main (void){
 	Node *root = NULL;
 	int valinta;
