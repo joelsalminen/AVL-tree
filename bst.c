@@ -22,6 +22,7 @@ Node* memory_allocate(Node *ptr){
 
 Node* create_node(int i, Node* tree){
 	if (tree == NULL){
+		printf("%d\n", i);
 		tree = memory_allocate(tree);
 		tree->value = i;
 		tree->ptrLeft = NULL;
@@ -29,9 +30,11 @@ Node* create_node(int i, Node* tree){
 	}
 	else{
 		if (tree->value>=i){
+			printf("%d->vasen->", tree->value);
 			tree->ptrLeft = create_node(i, tree->ptrLeft);
 		}
 		else{
+			printf("%d->oikea->",tree->value);
 			tree->ptrRight = create_node(i, tree->ptrRight);
 		}
 	}
@@ -43,30 +46,10 @@ Node* create_node(int i, Node* tree){
 
 int main (void){
 	Node *root = NULL;
-	root = create_node(5, root);
-	root = create_node(2, root);
-	root = create_node(6, root);
-	printf("%d\n",root->value);
-	printf("%d\n", root->ptrLeft->value);
-	printf("%d\n", root->ptrRight->value);
+	int i;
+	printf("Anna lisättävä luku (ctrl+d lopettaa): ");
+	while (scanf("%d", &i)!=EOF){
+		root = create_node(i, root);
+	}
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
