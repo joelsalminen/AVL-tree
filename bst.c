@@ -44,30 +44,54 @@ Node* create_node(int i, Node* tree){
 
 
 void get_node(int i, Node *tree){
-	if (tree->value > i){
-		printf("%d ", tree->value);
-		get_node(i, tree->ptrLeft);
+	if (tree == NULL){
+		printf("Kysyttyä alkiota ei löydy!\n");
 	}
-	else if (tree->value < i){
-		printf("%d ",tree->value);
-		get_node(i, tree->ptrRight);
-	}
-	else if (tree->value == i){
-		printf("%d\n",tree->value);
+
+	else{
+		if (tree->value > i){
+			printf("%d ", tree->value);
+			get_node(i, tree->ptrLeft);
+		}
+		else if (tree->value < i){
+			printf("%d ",tree->value);
+			get_node(i, tree->ptrRight);
+		}
+		else if (tree->value == i){
+			printf("%d\n",tree->value);
+		}
 	}
 }
 
 
 int main (void){
 	Node *root = NULL;
+	int valinta;
 	int i;
 	int j;
-	printf("Anna lisättävä luku (ctrl+d lopettaa): ");
-	while (scanf("%d", &i)!=EOF){
-		root = create_node(i, root);
+
+	while (1){
+		printf("Päävalikko\n\n");
+		printf("1) Lisää alkio puuhun\n");
+		printf("2) Etsi alkio puusta\n");
+		printf("0) Lopeta\n");
+		printf("Valinta: ");
+		scanf("%d", &valinta);
+		if (valinta==1){
+			printf("Anna lisättävä alkio: ");
+			scanf("%d", &i);
+			printf("Lisätään alkio %d puuhun paikalle\n", i);
+			root = create_node(i, root);
+		}
+		else if (valinta==2){
+			printf("Anna haettava alkio: ");
+			scanf("%d", &j);
+			get_node(j, root);
+		}
+		else if (valinta==0){
+			break;
+		}
 	}
-	printf("Anna haettava alkio: ");
-	scanf("%d", &j);
-	get_node(j, root);
+	
 	return 0;
 }
