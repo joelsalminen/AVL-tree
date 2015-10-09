@@ -77,6 +77,19 @@ void print_inorder(Node *tree){
 }
 
 
+void free_memory(Node* tree){
+	//vapauttaa mallocilla varatun muistin ohjelman lopussa
+	if (tree != NULL){
+		if (tree->ptrLeft != NULL)
+			free_memory(tree->ptrLeft);
+		if (tree->ptrRight != NULL);
+			free_memory(tree->ptrRight);
+		free(tree);
+
+	}
+}
+
+
 int main (void){
 	Node *root = NULL;
 	int valinta;
@@ -106,6 +119,7 @@ int main (void){
 			print_inorder(root);
 		}
 		else if (valinta==0){
+			free_memory(root);
 			break;
 		}
 	}
