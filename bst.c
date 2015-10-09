@@ -40,16 +40,34 @@ Node* create_node(int i, Node* tree){
 	}
 
 	return (tree);
+}
 
+
+void get_node(int i, Node *tree){
+	if (tree->value > i){
+		printf("%d ", tree->value);
+		get_node(i, tree->ptrLeft);
+	}
+	else if (tree->value < i){
+		printf("%d ",tree->value);
+		get_node(i, tree->ptrRight);
+	}
+	else if (tree->value == i){
+		printf("%d\n",tree->value);
+	}
 }
 
 
 int main (void){
 	Node *root = NULL;
 	int i;
+	int j;
 	printf("Anna lisättävä luku (ctrl+d lopettaa): ");
 	while (scanf("%d", &i)!=EOF){
 		root = create_node(i, root);
 	}
+	printf("Anna haettava alkio: ");
+	scanf("%d", &j);
+	get_node(j, root);
 	return 0;
 }
