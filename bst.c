@@ -20,7 +20,8 @@ Node* memory_allocate(Node *ptr){
 }
 
 
-Node* create_node(int i, Node* tree){
+Node* add_node(int i, Node* tree){
+	//
 	if (tree == NULL){
 		printf("%d\n", i);
 		tree = memory_allocate(tree);
@@ -31,11 +32,11 @@ Node* create_node(int i, Node* tree){
 	else{
 		if (tree->value>=i){
 			printf("%d->vasen->", tree->value);
-			tree->ptrLeft = create_node(i, tree->ptrLeft);
+			tree->ptrLeft = add_node(i, tree->ptrLeft);
 		}
 		else{
 			printf("%d->oikea->",tree->value);
-			tree->ptrRight = create_node(i, tree->ptrRight);
+			tree->ptrRight = add_node(i, tree->ptrRight);
 		}
 	}
 
@@ -44,6 +45,7 @@ Node* create_node(int i, Node* tree){
 
 
 void get_node(int i, Node *tree){
+	//Etsii kysytyn avaimen puusta
 	if (tree == NULL){
 		printf("Kysyttyä alkiota ei löydy!\n");
 	}
@@ -65,6 +67,8 @@ void get_node(int i, Node *tree){
 
 
 void print_inorder(Node *tree){
+	//Tulostaa solmuen arvot järjestyksessä vasen lapsi, solmu, oikea lapsi
+	//
 	if (tree != NULL){
 		print_inorder(tree->ptrLeft);
 		printf("%d ", tree->value);
@@ -83,6 +87,7 @@ int main (void){
 		printf("Päävalikko\n\n");
 		printf("1) Lisää alkio puuhun\n");
 		printf("2) Etsi alkio puusta\n");
+		printf("3) Tulosta kaikki alkiot\n");
 		printf("0) Lopeta\n");
 		printf("Valinta: ");
 		scanf("%d", &valinta);
@@ -90,12 +95,15 @@ int main (void){
 			printf("Anna lisättävä alkio: ");
 			scanf("%d", &i);
 			printf("Lisätään alkio %d puuhun paikalle\n", i);
-			root = create_node(i, root);
+			root = add_node(i, root);
 		}
 		else if (valinta==2){
 			printf("Anna haettava alkio: ");
 			scanf("%d", &j);
 			get_node(j, root);
+		}
+		else if (valinta == 3){
+			print_inorder(root);
 		}
 		else if (valinta==0){
 			break;
