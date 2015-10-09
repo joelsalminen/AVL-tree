@@ -11,6 +11,7 @@ typedef struct node Node;
 
 
 Node* memory_allocate(Node *ptr){
+	//varaa muistia uudelle solmulle
 	if ((ptr = (Node*)malloc(sizeof(Node))) == NULL) {
             perror("Muistin varaus epäonnistui");
             exit(1);
@@ -21,7 +22,7 @@ Node* memory_allocate(Node *ptr){
 
 
 Node* add_node(int i, Node* tree){
-	//
+	//Lisää uuden solmun puuhun
 	if (tree == NULL){
 		printf("%d\n", i);
 		tree = memory_allocate(tree);
@@ -68,7 +69,6 @@ void get_node(int i, Node *tree){
 
 void print_inorder(Node *tree){
 	//Tulostaa solmuen arvot järjestyksessä vasen lapsi, solmu, oikea lapsi
-	//
 	if (tree != NULL){
 		print_inorder(tree->ptrLeft);
 		printf("%d ", tree->value);
