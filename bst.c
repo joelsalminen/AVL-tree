@@ -24,7 +24,6 @@ Node* memory_allocate(Node *ptr){
 Node* add_node(int i, Node* tree){
 	//Lisää uuden solmun puuhun
 	if (tree == NULL){
-		printf("%d\n", i);
 		tree = memory_allocate(tree);
 		tree->value = i;
 		tree->ptrLeft = NULL;
@@ -32,11 +31,13 @@ Node* add_node(int i, Node* tree){
 	}
 	else{
 		if (tree->value>=i){
-			printf("%d->vasen->", tree->value);
+			if (tree->ptrLeft == NULL)
+				printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n\n", i, tree->value);
 			tree->ptrLeft = add_node(i, tree->ptrLeft);
 		}
 		else{
-			printf("%d->oikea->",tree->value);
+			if (tree->ptrRight == NULL)
+				printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n\n", i, tree->value);
 			tree->ptrRight = add_node(i, tree->ptrRight);
 		}
 	}
@@ -107,7 +108,6 @@ int main (void){
 		if (valinta==1){
 			printf("Anna lisättävä alkio: ");
 			scanf("%d", &i);
-			printf("Lisätään alkio %d puuhun paikalle\n", i);
 			root = add_node(i, root);
 		}
 		else if (valinta==2){
@@ -122,6 +122,9 @@ int main (void){
 		else if (valinta==0){
 			free_memory(root);
 			break;
+		}
+		else{
+			printf("Anna kelvollinen syöte!\n\n");
 		}
 	}
 	
