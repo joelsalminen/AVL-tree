@@ -82,7 +82,7 @@ void free_memory(Node* tree){
 	if (tree != NULL){
 		if (tree->ptrLeft != NULL)
 			free_memory(tree->ptrLeft);
-		if (tree->ptrRight != NULL);
+		if (tree->ptrRight != NULL)
 			free_memory(tree->ptrRight);
 		free(tree);
 
@@ -117,6 +117,7 @@ int main (void){
 		}
 		else if (valinta == 3){
 			print_inorder(root);
+			printf("\n");
 		}
 		else if (valinta==0){
 			free_memory(root);
