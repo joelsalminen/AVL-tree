@@ -53,11 +53,11 @@ void get_node(int i, Node *tree){
 
 	else{
 		if (tree->value > i){
-			printf("%d ", tree->value);
+			printf("%d->vasen->", tree->value);
 			get_node(i, tree->ptrLeft);
 		}
 		else if (tree->value < i){
-			printf("%d ",tree->value);
+			printf("%d->oikea->",tree->value);
 			get_node(i, tree->ptrRight);
 		}
 		else if (tree->value == i){
