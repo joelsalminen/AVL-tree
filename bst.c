@@ -49,7 +49,7 @@ Node* add_node(int i, Node* tree){
 void get_node(int i, Node *tree){
 	//Etsii kysytyn avaimen puusta
 	if (tree == NULL){
-		printf("Kysyttyä alkiota ei löydy!\n");
+		printf("\nKysyttyä alkiota ei löydy!\n\n");
 	}
 
 	else{
