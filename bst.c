@@ -70,7 +70,7 @@ void get_node(int i, Node *tree){
 
 void print_inorder(Node *tree){
 	//Tulostaa solmuen arvot järjestyksessä vasen lapsi, solmu, oikea lapsi
-	if (tree != NULL){
+	if (tree){
 		print_inorder(tree->ptrLeft);
 		printf("%d ", tree->value);
 		print_inorder(tree->ptrRight);
@@ -80,7 +80,7 @@ void print_inorder(Node *tree){
 
 void free_memory(Node* tree){
 	//vapauttaa mallocilla varatun muistin ohjelman lopussa
-	if (tree != NULL){
+	if (tree){
 		if (tree->ptrLeft != NULL)
 			free_memory(tree->ptrLeft);
 		if (tree->ptrRight != NULL)
