@@ -10,6 +10,19 @@ struct node{
 typedef struct node Node;
 
 
+void read_file(char[30] filename){
+	FILE* entry_file;
+	if ((tiedosto = fopen(filename, "r")) == NULL) {
+		perror("Tiedoston avaaminen epäonnistui.");
+		//exit(1);
+	}
+	while (fgets(entry, 5, entry_file) != NULL) {
+		printf("%s\n", entry);
+
+	}
+}
+
+
 Node* memory_allocate(Node *ptr){
 	//varaa muistia uudelle solmulle
 	if ((ptr = (Node*)malloc(sizeof(Node))) == NULL) {
@@ -98,6 +111,7 @@ int main (void){
 	int j;
 
 	while (1){
+		read_file("alkiot.txt");
 		printf("Päävalikko\n\n");
 		printf("1) Lisää alkio puuhun\n");
 		printf("2) Etsi alkio puusta\n");
