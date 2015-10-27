@@ -10,9 +10,10 @@ struct node{
 typedef struct node Node;
 
 
-void read_file(char[30] filename){
+void read_file(char filename [30]){
 	FILE* entry_file;
-	if ((tiedosto = fopen(filename, "r")) == NULL) {
+	char entry[5];
+	if ((entry_file = fopen(filename, "r")) == NULL) {
 		perror("Tiedoston avaaminen epäonnistui.");
 		//exit(1);
 	}
