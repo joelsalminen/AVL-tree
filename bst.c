@@ -23,7 +23,7 @@ Node* read_file(char filename [30], Node* tree){
 	FILE* entry_file;
 	int key;
 	if ((entry_file = fopen(filename, "r")) == NULL) {
-		perror("Tiedoston avaaminen epäonnistui.");
+		perror("Tiedoston avaaminen epäonnistui\n");
 		return NULL;
 	}
 	while (fscanf(entry_file, "%d", &key) == 1) {
@@ -115,13 +115,16 @@ void free_memory(Node* tree){
 }
 
 
-int main (void){
+int main (int argc, char *argv[]){
 	Node *root = NULL;
 	int valinta;
 	int i;
 	int j;
 
 	while (1){
+		if (argc > 1){
+			root = read_file(argv[1], root);
+		}
 
 		printf("Päävalikko\n\n");
 		printf("1) Lisää alkio puuhun\n");
