@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 
 struct node{
@@ -10,17 +11,26 @@ struct node{
 typedef struct node Node;
 
 
-void read_file(char filename [30]){
+Node* read_file(char filename [30], Node* tree);
+Node* add_node(int i, Node* tree);
+Node* memory_allocate(Node *ptr);
+void get_node(int i, Node *tree);
+void print_inorder(Node *tree);
+void free_memory(Node* tree);
+
+
+Node* read_file(char filename [30], Node* tree){
 	FILE* entry_file;
-	char entry[5];
+	int key;
 	if ((entry_file = fopen(filename, "r")) == NULL) {
 		perror("Tiedoston avaaminen epäonnistui.");
-		//exit(1);
+		return NULL;
 	}
-	while (fgets(entry, 5, entry_file) != NULL) {
-		printf("%s\n", entry);
-
+	while (fscanf(entry_file, "%d", &key) == 1) {
+		tree = add_node(key, tree);
 	}
+	fclose(entry_file);
+	return tree;
 }
 
 
@@ -112,7 +122,7 @@ int main (void){
 	int j;
 
 	while (1){
-		read_file("alkiot.txt");
+
 		printf("Päävalikko\n\n");
 		printf("1) Lisää alkio puuhun\n");
 		printf("2) Etsi alkio puusta\n");
