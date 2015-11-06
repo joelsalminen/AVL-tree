@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+//#include <ctype.h>
 
 
 struct node{
-	int value;
+	int key;
 	int height;
 	struct node *ptrLeft;
 	struct node *ptrRight;
@@ -12,24 +12,29 @@ struct node{
 typedef struct node Node;
 
 
-Node* read_file(char filename [30], Node* tree);
-Node* add_node(int i, Node* tree);
-Node* memory_allocate(Node *ptr);
-void get_node(int i, Node *tree);
-void print_inorder(Node *tree);
-void free_memory(Node* tree);
 Node* left_rotate(Node* tree);
 Node* right_rotate(Node* tree);
+Node* read_file(char filename [30], Node* tree);
+Node* memory_allocate(Node *ptr);
+int max(int i, int j);
 void set_height(Node* tree);
+int get_height(Node* tree);
+Node* avl_insert(int i, Node* tree);
+void get_node(int i, Node *tree);
+void print_tree(Node *tree);
+void free_memory(Node* tree);
+
 
 
 Node* left_rotate(Node* tree){
+	/* L-rotaatio */
 	Node *temp, *newRoot;
-	temp = tree->ptrLeft->ptrRight;
+	temp = tree->ptrLeft->ptrRight; //otetaan vasemman lapsen oikea lapsi talteen temp-muuttujaan
 	tree->ptrLeft->ptrRight = NULL;
-	newRoot = tree->ptrLeft;
-	tree->ptrLeft = temp;
-	newRoot->ptrRight = tree;
+	newRoot = tree->ptrLeft; //otetaan vasen lapsi talteen muuttujaan newRoot
+	tree->ptrLeft = temp; //alkuperäisen alipuun juuren vasemmaksi lapseksi temp
+	newRoot->ptrRight = tree; //alkuperäisen alipuun juuri uuden juuren oikeaksi lapseksi
+	// Korjataan solmujen korkeudet: 
 	set_height(newRoot);
 	set_height(tree);
 	return (newRoot);
@@ -37,6 +42,7 @@ Node* left_rotate(Node* tree){
 
 
 Node* right_rotate(Node* tree){
+	/* R-rotaatio, peilikuva L-rotaatiolle. */
 	Node *temp, *newRoot;
 	temp = tree->ptrRight->ptrLeft;
 	tree->ptrRight->ptrLeft = NULL;
@@ -50,6 +56,7 @@ Node* right_rotate(Node* tree){
 
 
 Node* read_file(char filename [30], Node* tree){
+	/* Lukee tiedoston ja lisää tiedostosta haetut alkiot puuhun. */
 	FILE* entry_file;
 	int key;
 	if ((entry_file = fopen(filename, "r")) == NULL) {
@@ -57,7 +64,7 @@ Node* read_file(char filename [30], Node* tree){
 		return NULL;
 	}
 	while (fscanf(entry_file, "%d", &key) == 1) {
-		tree = add_node(key, tree);
+		tree = avl_insert(key, tree);
 	}
 	fclose(entry_file);
 	return tree;
@@ -65,7 +72,7 @@ Node* read_file(char filename [30], Node* tree){
 
 
 Node* memory_allocate(Node *ptr){
-	//varaa muistia uudelle solmulle
+	/* Varaa muistia uudelle solmulle. */
 	if ((ptr = (Node*)malloc(sizeof(Node))) == NULL) {
             perror("Muistin varaus epäonnistui");
             exit(1);
@@ -76,6 +83,7 @@ Node* memory_allocate(Node *ptr){
 
 
 int max(int i, int j){
+	/* Palauttaa annetuista parametreista suuremman. */
 	if (i>j){
 		return i;
 	}
@@ -102,6 +110,7 @@ void set_height(Node* tree){
 
 
 int get_height(Node* tree){
+	/* Laskee puun korkeuden. Palauttaa arvon -1, jos puu on tyhjä. */
 	if (tree == NULL)
 		return -1;
 	else
@@ -109,22 +118,22 @@ int get_height(Node* tree){
 }
 
 
-Node* add_node(int i, Node* tree){
-	//Lisää uuden solmun puuhun
+Node* avl_insert(int i, Node* tree){
+	/* Lisää uuden solmun puuhun. */
 	if (tree == NULL){
 		tree = memory_allocate(tree);
-		tree->value = i;
+		tree->key = i;
 		tree->ptrLeft = NULL;
 		tree->ptrRight = NULL;
 	}
-	//Vasempaan haaraan lisääminen
-	else if (tree->value > i){
+	/* Vasempaan haaraan lisääminen. */
+	else if (tree->key > i){
 		if (tree->ptrLeft == NULL)
-			printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n\n", i, tree->value);
-		tree->ptrLeft = add_node(i, tree->ptrLeft);
-		//tasapainottaminen:
+			printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n\n", i, tree->key);
+		tree->ptrLeft = avl_insert(i, tree->ptrLeft);
+		/* tasapainottaminen: */
 		if(get_height(tree->ptrLeft) == get_height(tree->ptrRight)+ 2){
-			if(i < tree->ptrLeft->value){
+			if(i < tree->ptrLeft->key){
 				tree = left_rotate(tree);
 				printf("L\n");
 			}
@@ -135,18 +144,20 @@ Node* add_node(int i, Node* tree){
 			}
 		}
 	}
-
-	else if (tree->value < i){
+	/* Oikeaan haaraan lisääminen */
+	else if (tree->key < i){
 		if (tree->ptrRight == NULL)
-			printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n\n", i, tree->value);
-		tree->ptrRight = add_node(i, tree->ptrRight);
-		//tasapainottaminen:
+			printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n\n", i, tree->key);
+		tree->ptrRight = avl_insert(i, tree->ptrRight);
+		/* tasapainottaminen: */
 		if (get_height(tree->ptrRight) == get_height(tree->ptrLeft) + 2){
-			if (i > tree->ptrRight->value){
+			/* R-rotaatio */
+			if (i > tree->ptrRight->key){
 				tree = right_rotate(tree);
 				printf("R\n");
 			}
 			else{
+				/* RL-rotaatio */
 				tree->ptrRight =  left_rotate(tree->ptrRight);
 				tree = right_rotate(tree);
 				printf("RL\n");
@@ -156,55 +167,46 @@ Node* add_node(int i, Node* tree){
 	else{
 		printf("arvo on jo puussa\n");
 	}
-	//puun korkeuden määrittäminen
+	/* Korjataan solmum korkeus. */
 	set_height(tree);
 	return (tree);
 }
 
 
 void get_node(int i, Node *tree){
-	//Etsii kysytyn avaimen puusta
+	/* Etsii kysytyn avaimen puusta. */
 	if (tree == NULL){
-		printf("\nKysyttyä alkiota ei löydy!\n\n");
+		printf("Kysyttyä alkiota ei löytynyt.\n\n");
 	}
 
 	else{
-		if (tree->value > i){
-			printf("%d->vasen->", tree->value);
+		if (tree->key > i){
+			printf("Etsitään avaimen %d sisältävän solmun vasemmasta haarasta.\n", tree->key);
 			get_node(i, tree->ptrLeft);
 		}
-		else if (tree->value < i){
-			printf("%d->oikea->",tree->value);
+		else if (tree->key < i){
+			printf("Etsitään avaimen %d sisältävän solmun oikeasta haarasta.\n",tree->key);
 			get_node(i, tree->ptrRight);
 		}
-		else if (tree->value == i){
-			printf("%d\n",tree->value);
+		else if (tree->key == i){
+			printf("Alkio %d löytyi.\n",tree->key);
 		}
 	}
 }
 
 
-void print_inorder(Node *tree){
-	//Tulostaa solmuen arvot järjestyksessä vasen lapsi, solmu, oikea lapsi
+void print_print_tree(Node* tree){
+	/* Tulostaa puurakenteen */
 	if (tree){
-		print_inorder(tree->ptrLeft);
-		printf("%d ", tree->value);
-		print_inorder(tree->ptrRight);
-	}
-}
-
-
-void print_reverse_inorder(Node* tree){
-	if (tree){
-		print_reverse_inorder(tree->ptrRight);
-		printf("%d(%d)\n", tree->value, tree->height);
-		print_reverse_inorder(tree->ptrLeft);
+		print_print_tree(tree->ptrRight);
+		printf("%d(%d)\n", tree->key, tree->height);
+		print_print_tree(tree->ptrLeft);
 	}
 }
 
 
 void free_memory(Node* tree){
-	//vapauttaa mallocilla varatun muistin ohjelman lopussa
+	/* Vapauttaa dynaamisesti varatun muistin. */
 	if (tree){
 		if (tree->ptrLeft != NULL)
 			free_memory(tree->ptrLeft);
@@ -222,6 +224,8 @@ int main (int argc, char *argv[]){
 	int i;
 	int j;
 
+	/* Luetaan komentoriviltä tiedostonimi ja tallennetaan tiedostosta löytyvät 
+	kokonaisluvut puuhun. */
 	while (1){
 		if (argc > 1){
 			root = read_file(argv[1], root);
@@ -237,18 +241,18 @@ int main (int argc, char *argv[]){
 		if (valinta==1){
 			printf("Anna lisättävä alkio: ");
 			scanf("%d", &i);
-			root = add_node(i, root);
+			root = avl_insert(i, root);
 		}
-		else if (valinta==2){
+		else if (valinta == 2){
 			printf("Anna haettava alkio: ");
 			scanf("%d", &j);
 			get_node(j, root);
 		}
 		else if (valinta == 3){
-			print_reverse_inorder(root);
+			print_print_tree(root);
 			printf("\n");
 		}
-		else if (valinta==0){
+		else if (valinta == 0){
 			free_memory(root);
 			break;
 		}
