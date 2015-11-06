@@ -80,6 +80,22 @@ int max(int i, int j){
 }
 
 
+void set_height(Node* tree){
+	if (tree->ptrLeft == NULL && tree->ptrRight == NULL){
+		tree->height = 1;
+	}
+	else if(tree->ptrLeft != NULL && tree->ptrRight == NULL){
+		tree->height = tree->ptrLeft->height + 1;
+	}
+	else if(tree->ptrLeft == NULL && tree->ptrRight != NULL){
+		tree->height = tree->ptrRight->height + 1;
+	}
+	else {
+		tree->height = max(tree->ptrRight->height, tree->ptrLeft->height) + 1;
+	}
+}
+
+
 Node* add_node(int i, Node* tree){
 	//Lisää uuden solmun puuhun
 	if (tree == NULL){
@@ -101,18 +117,7 @@ Node* add_node(int i, Node* tree){
 		}
 	}
 	//puun korkeuden määrittäminen
-	if (tree->ptrLeft == NULL && tree->ptrRight == NULL){
-		tree->height = 1;
-	}
-	else if(tree->ptrLeft != NULL && tree->ptrRight == NULL){
-		tree->height = tree->ptrLeft->height + 1;
-	}
-	else if(tree->ptrLeft == NULL && tree->ptrRight != NULL){
-		tree->height = tree->ptrRight->height + 1;
-	}
-	else {
-		tree->height = max(tree->ptrRight->height, tree->ptrLeft->height) + 1;
-	}
+	set_height(tree);
 	return (tree);
 }
 
