@@ -20,6 +20,7 @@ void print_inorder(Node *tree);
 void free_memory(Node* tree);
 Node* left_rotate(Node* tree);
 Node* right_rotate(Node* tree);
+void set_height(Node* tree);
 
 
 Node* left_rotate(Node* tree){
@@ -29,6 +30,8 @@ Node* left_rotate(Node* tree){
 	newRoot = tree->ptrLeft;
 	tree->ptrLeft = temp;
 	newRoot->ptrRight = tree;
+	set_height(newRoot);
+	set_height(tree);
 	return (newRoot);
 }
 
@@ -40,6 +43,8 @@ Node* right_rotate(Node* tree){
 	newRoot = tree->ptrRight;
 	tree->ptrRight = temp;
 	newRoot->ptrLeft = tree;
+	set_height(newRoot);
+	set_height(tree);
 	return (newRoot);
 }
 
