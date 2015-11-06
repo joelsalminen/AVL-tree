@@ -18,6 +18,7 @@ void get_node(int i, Node *tree);
 void print_inorder(Node *tree);
 void free_memory(Node* tree);
 Node* left_rotate(Node* tree);
+Node* right_rotate(Node* tree);
 
 
 Node* left_rotate(Node* tree){
@@ -27,6 +28,17 @@ Node* left_rotate(Node* tree){
 	newRoot = tree->ptrLeft;
 	tree->ptrLeft = temp;
 	newRoot->ptrRight = tree;
+	return (newRoot);
+}
+
+
+Node* right_rotate(Node* tree){
+	Node *temp, *newRoot;
+	temp = tree->ptrRight->ptrLeft;
+	tree->ptrRight->ptrLeft = NULL;
+	newRoot = tree->ptrRight;
+	tree->ptrRight = temp;
+	newRoot->ptrLeft = tree;
 	return (newRoot);
 }
 
@@ -156,7 +168,6 @@ int main (int argc, char *argv[]){
 			get_node(j, root);
 		}
 		else if (valinta == 3){
-			root = left_rotate(root);
 			print_inorder(root);
 			printf("\n");
 		}
