@@ -32,8 +32,8 @@ Node* left_rotate(Node* tree){
 	tree->ptrLeft = temp; //alkuperäisen alipuun juuren vasemmaksi lapseksi temp
 	newRoot->ptrRight = tree; //alkuperäisen alipuun juuri uuden juuren oikeaksi lapseksi
 	// Korjataan solmujen korkeudet: 
-	set_height(newRoot);
-	set_height(tree);
+	tree->height = max(get_height(tree->ptrLeft), get_height(tree->ptrRight)) + 1;
+	newRoot->height = max(get_height(newRoot->ptrLeft), get_height(newRoot->ptrRight)) + 1;
 	return (newRoot);
 }
 
@@ -46,8 +46,8 @@ Node* right_rotate(Node* tree){
 	newRoot = tree->ptrRight;
 	tree->ptrRight = temp;
 	newRoot->ptrLeft = tree;
-	set_height(newRoot);
-	set_height(tree);
+	tree->height = max(get_height(tree->ptrLeft), get_height(tree->ptrRight)) + 1;
+	newRoot->height = max(get_height(newRoot->ptrLeft), get_height(newRoot->ptrRight)) + 1;
 	return (newRoot);
 }
 
@@ -176,12 +176,13 @@ void get_node(int i, Node *tree){
 }
 
 
-void print_print_tree(Node* tree){
+void print_tree(Node* tree){
 	/* Tulostaa puurakenteen */
 	if (tree){
-		print_print_tree(tree->ptrRight);
+		print_tree(tree->ptrRight);
 		printf("%d(%d)\n", tree->key, tree->height);
-		print_print_tree(tree->ptrLeft);
+		print_tree(tree->ptrLeft);
+		
 	}
 }
 
@@ -207,10 +208,10 @@ int main (int argc, char *argv[]){
 
 	/* Luetaan komentoriviltä tiedostonimi ja tallennetaan tiedostosta löytyvät 
 	kokonaisluvut puuhun. */
+	if (argc > 1){
+		root = read_file(argv[1], root);
+	}
 	while (1){
-		if (argc > 1){
-			root = read_file(argv[1], root);
-		}
 
 		printf("Päävalikko\n\n");
 		printf("1) Lisää alkio puuhun\n");
@@ -230,7 +231,7 @@ int main (int argc, char *argv[]){
 			get_node(j, root);
 		}
 		else if (valinta == 3){
-			print_print_tree(root);
+			print_tree(root);
 			printf("\n");
 		}
 		else if (valinta == 0){
