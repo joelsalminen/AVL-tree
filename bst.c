@@ -5,6 +5,7 @@
 
 struct node{
 	int value;
+	int depth;
 	struct node *ptrLeft;
 	struct node *ptrRight;
 };
@@ -102,6 +103,15 @@ void print_inorder(Node *tree){
 }
 
 
+void print_reverse_inorder(Node* tree){
+	if (tree){
+		print_reverse_inorder(tree->ptrRight);
+		printf("%d\n", tree->value);
+		print_reverse_inorder(tree->ptrLeft);
+	}
+}
+
+
 void free_memory(Node* tree){
 	//vapauttaa mallocilla varatun muistin ohjelman lopussa
 	if (tree){
@@ -144,7 +154,7 @@ int main (int argc, char *argv[]){
 			get_node(j, root);
 		}
 		else if (valinta == 3){
-			print_inorder(root);
+			print_reverse_inorder(root);
 			printf("\n");
 		}
 		else if (valinta==0){
