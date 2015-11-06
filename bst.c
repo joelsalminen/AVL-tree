@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <ctype.h>
 
 
 struct node{
@@ -17,13 +16,11 @@ Node* right_rotate(Node* tree);
 Node* read_file(char filename [30], Node* tree);
 Node* memory_allocate(Node *ptr);
 int max(int i, int j);
-void set_height(Node* tree);
 int get_height(Node* tree);
 Node* avl_insert(int i, Node* tree);
 void get_node(int i, Node *tree);
 void print_tree(Node *tree);
 void free_memory(Node* tree);
-
 
 
 Node* left_rotate(Node* tree){
@@ -93,22 +90,6 @@ int max(int i, int j){
 }
 
 
-void set_height(Node* tree){
-	if (tree->ptrLeft == NULL && tree->ptrRight == NULL){
-		tree->height = 0;
-	}
-	else if(tree->ptrLeft != NULL && tree->ptrRight == NULL){
-		tree->height = tree->ptrLeft->height + 1;
-	}
-	else if(tree->ptrLeft == NULL && tree->ptrRight != NULL){
-		tree->height = tree->ptrRight->height + 1;
-	}
-	else {
-		tree->height = max(tree->ptrRight->height, tree->ptrLeft->height) + 1;
-	}
-}
-
-
 int get_height(Node* tree){
 	/* Laskee puun korkeuden. Palauttaa arvon -1, jos puu on tyhjä. */
 	if (tree == NULL)
@@ -165,10 +146,10 @@ Node* avl_insert(int i, Node* tree){
 		}
 	}
 	else{
-		printf("arvo on jo puussa\n");
+		printf("Arvo on jo aikaisemmin lisätty puuhun!\n");
 	}
 	/* Korjataan solmum korkeus. */
-	set_height(tree);
+	tree->height = max(get_height(tree->ptrLeft), get_height(tree->ptrRight)) + 1;
 	return (tree);
 }
 
@@ -260,6 +241,5 @@ int main (int argc, char *argv[]){
 			printf("Anna kelvollinen syöte!\n\n");
 		}
 	}
-	
 	return 0;
 }
