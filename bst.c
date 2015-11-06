@@ -87,7 +87,7 @@ int max(int i, int j){
 
 void set_height(Node* tree){
 	if (tree->ptrLeft == NULL && tree->ptrRight == NULL){
-		tree->height = 1;
+		tree->height = 0;
 	}
 	else if(tree->ptrLeft != NULL && tree->ptrRight == NULL){
 		tree->height = tree->ptrLeft->height + 1;
@@ -101,6 +101,14 @@ void set_height(Node* tree){
 }
 
 
+int get_height(Node* tree){
+	if (tree == NULL)
+		return -1;
+	else
+		return tree->height;
+}
+
+
 Node* add_node(int i, Node* tree){
 	//Lisää uuden solmun puuhun
 	if (tree == NULL){
@@ -109,17 +117,44 @@ Node* add_node(int i, Node* tree){
 		tree->ptrLeft = NULL;
 		tree->ptrRight = NULL;
 	}
+	//Vasempaan haaraan lisääminen
+	else if (tree->value > i){
+		if (tree->ptrLeft == NULL)
+			printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n\n", i, tree->value);
+		tree->ptrLeft = add_node(i, tree->ptrLeft);
+		//tasapainottaminen:
+		if(get_height(tree->ptrLeft) == get_height(tree->ptrRight)+ 2){
+			if(i < tree->ptrLeft->value){
+				tree = left_rotate(tree);
+				printf("L\n");
+			}
+			else{
+				tree->ptrLeft = right_rotate(tree->ptrLeft);
+				tree = left_rotate(tree);
+				printf("LR\n");
+			}
+		}
+	}
+
+	else if (tree->value < i){
+		if (tree->ptrRight == NULL)
+			printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n\n", i, tree->value);
+		tree->ptrRight = add_node(i, tree->ptrRight);
+		//tasapainottaminen:
+		if (get_height(tree->ptrRight) == get_height(tree->ptrLeft) + 2){
+			if (i > tree->ptrRight->value){
+				tree = right_rotate(tree);
+				printf("R\n");
+			}
+			else{
+				tree->ptrRight =  left_rotate(tree->ptrRight);
+				tree = right_rotate(tree);
+				printf("RL\n");
+			}
+		}
+	}
 	else{
-		if (tree->value>=i){
-			if (tree->ptrLeft == NULL)
-				printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n\n", i, tree->value);
-			tree->ptrLeft = add_node(i, tree->ptrLeft);
-		}
-		else{
-			if (tree->ptrRight == NULL)
-				printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n\n", i, tree->value);
-			tree->ptrRight = add_node(i, tree->ptrRight);
-		}
+		printf("arvo on jo puussa\n");
 	}
 	//puun korkeuden määrittäminen
 	set_height(tree);
