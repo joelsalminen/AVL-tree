@@ -5,6 +5,7 @@
 
 struct node{
 	int value;
+	int height;
 	struct node *ptrLeft;
 	struct node *ptrRight;
 };
@@ -69,6 +70,16 @@ Node* memory_allocate(Node *ptr){
 }
 
 
+int max(int i, int j){
+	if (i>j){
+		return i;
+	}
+	else{
+		return j;
+	}
+}
+
+
 Node* add_node(int i, Node* tree){
 	//Lisää uuden solmun puuhun
 	if (tree == NULL){
@@ -89,7 +100,19 @@ Node* add_node(int i, Node* tree){
 			tree->ptrRight = add_node(i, tree->ptrRight);
 		}
 	}
-
+	//puun korkeuden määrittäminen
+	if (tree->ptrLeft == NULL && tree->ptrRight == NULL){
+		tree->height = 1;
+	}
+	else if(tree->ptrLeft != NULL && tree->ptrRight == NULL){
+		tree->height = tree->ptrLeft->height + 1;
+	}
+	else if(tree->ptrLeft == NULL && tree->ptrRight != NULL){
+		tree->height = tree->ptrRight->height + 1;
+	}
+	else {
+		tree->height = max(tree->ptrRight->height, tree->ptrLeft->height) + 1;
+	}
 	return (tree);
 }
 
@@ -122,6 +145,15 @@ void print_inorder(Node *tree){
 		print_inorder(tree->ptrLeft);
 		printf("%d ", tree->value);
 		print_inorder(tree->ptrRight);
+	}
+}
+
+
+void print_reverse_inorder(Node* tree){
+	if (tree){
+		print_reverse_inorder(tree->ptrRight);
+		printf("%d(%d)\n", tree->value, tree->height);
+		print_reverse_inorder(tree->ptrLeft);
 	}
 }
 
@@ -168,7 +200,7 @@ int main (int argc, char *argv[]){
 			get_node(j, root);
 		}
 		else if (valinta == 3){
-			print_inorder(root);
+			print_reverse_inorder(root);
 			printf("\n");
 		}
 		else if (valinta==0){
