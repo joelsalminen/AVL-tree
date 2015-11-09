@@ -93,7 +93,7 @@ int max(int i, int j){
 int get_height(Node* tree){
 	/* Laskee puun korkeuden. Palauttaa arvon -1, jos puu on tyhjä. */
 	if (tree == NULL)
-		return -1;
+		return 0;
 	else
 		return tree->height;
 }
@@ -110,38 +110,38 @@ Node* avl_insert(int i, Node* tree){
 	/* Vasempaan haaraan lisääminen. */
 	else if (tree->key > i){
 		if (tree->ptrLeft == NULL)
-			printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n\n", i, tree->key);
+			printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n", i, tree->key);
 		tree->ptrLeft = avl_insert(i, tree->ptrLeft);
 		/* tasapainottaminen: */
 		if(get_height(tree->ptrLeft) == get_height(tree->ptrRight)+ 2){
 			if(i < tree->ptrLeft->key){
 				tree = left_rotate(tree);
-				printf("L\n");
+				printf("L\n\n");
 			}
 			else{
 				tree->ptrLeft = right_rotate(tree->ptrLeft);
 				tree = left_rotate(tree);
-				printf("LR\n");
+				printf("LR\n\n");
 			}
 		}
 	}
 	/* Oikeaan haaraan lisääminen */
 	else if (tree->key < i){
 		if (tree->ptrRight == NULL)
-			printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n\n", i, tree->key);
+			printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n", i, tree->key);
 		tree->ptrRight = avl_insert(i, tree->ptrRight);
 		/* tasapainottaminen: */
 		if (get_height(tree->ptrRight) == get_height(tree->ptrLeft) + 2){
 			/* R-rotaatio */
 			if (i > tree->ptrRight->key){
 				tree = right_rotate(tree);
-				printf("R\n");
+				printf("R\n\n");
 			}
 			else{
 				/* RL-rotaatio */
 				tree->ptrRight =  left_rotate(tree->ptrRight);
 				tree = right_rotate(tree);
-				printf("RL\n");
+				printf("RL\n\n");
 			}
 		}
 	}
@@ -170,7 +170,7 @@ void get_node(int i, Node *tree){
 			get_node(i, tree->ptrRight);
 		}
 		else if (tree->key == i){
-			printf("Alkio %d löytyi.\n",tree->key);
+			printf("Alkio %d löytyi.\n\n",tree->key);
 		}
 	}
 }
@@ -187,7 +187,6 @@ void print_tree(Node* tree, int tabs){
 		}
 		printf("%d(%d)\n", tree->key, tree->height);
 		print_tree(tree->ptrLeft, tabs + 1);
-		
 	}
 }
 
