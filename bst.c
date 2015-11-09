@@ -19,7 +19,7 @@ int max(int i, int j);
 int get_height(Node* tree);
 Node* avl_insert(int i, Node* tree);
 void get_node(int i, Node *tree);
-void print_tree(Node *tree);
+void print_tree(Node *tree, int tabs);
 void free_memory(Node* tree);
 
 
@@ -176,12 +176,17 @@ void get_node(int i, Node *tree){
 }
 
 
-void print_tree(Node* tree){
+void print_tree(Node* tree, int tabs){
 	/* Tulostaa puurakenteen */
+	int i = tabs;
 	if (tree){
-		print_tree(tree->ptrRight);
+		print_tree(tree->ptrRight, tabs + 1);
+		while (i>0){
+			printf("\t");
+			i--;
+		}
 		printf("%d(%d)\n", tree->key, tree->height);
-		print_tree(tree->ptrLeft);
+		print_tree(tree->ptrLeft, tabs + 1);
 		
 	}
 }
@@ -231,7 +236,7 @@ int main (int argc, char *argv[]){
 			get_node(j, root);
 		}
 		else if (valinta == 3){
-			print_tree(root);
+			print_tree(root, 0);
 			printf("\n");
 		}
 		else if (valinta == 0){
