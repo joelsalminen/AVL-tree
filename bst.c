@@ -1,3 +1,7 @@
+/*Joel Salminen		0401495*/
+/*gcc -o 0401495 0401495.c -W -Wall -std=c99*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -157,7 +161,7 @@ Node* avl_insert(int i, Node* tree){
 void get_node(int i, Node *tree){
 	/* Etsii kysytyn avaimen puusta. */
 	if (tree == NULL){
-		printf("Kysyttyä alkiota ei löytynyt.\n\n");
+		printf("Kysyttyä alkiota ei löytynyt.\n");
 	}
 
 	else{
@@ -170,7 +174,7 @@ void get_node(int i, Node *tree){
 			get_node(i, tree->ptrRight);
 		}
 		else if (tree->key == i){
-			printf("Alkio %d löytyi.\n\n",tree->key);
+			printf("Alkio %d löytyi.\n",tree->key);
 		}
 	}
 }
@@ -216,8 +220,7 @@ int main (int argc, char *argv[]){
 		root = read_file(argv[1], root);
 	}
 	while (1){
-
-		printf("Päävalikko\n\n");
+		printf("\nPäävalikko\n\n");
 		printf("1) Lisää alkio puuhun\n");
 		printf("2) Etsi alkio puusta\n");
 		printf("3) Tulosta kaikki alkiot\n");
@@ -235,8 +238,14 @@ int main (int argc, char *argv[]){
 			get_node(j, root);
 		}
 		else if (valinta == 3){
-			print_tree(root, 0);
-			printf("\n");
+			if (root){
+				printf("\n");
+				print_tree(root, 0);
+				printf("\n");
+			}
+			else {
+				printf("Lisää ensin alkioita puuhun!\n");
+			}
 		}
 		else if (valinta == 0){
 			free_memory(root);
