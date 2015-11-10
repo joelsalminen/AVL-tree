@@ -1,5 +1,8 @@
-/*Joel Salminen		0401495*/
-/*gcc -o 0401495 0401495.c -W -Wall -std=c99*/
+/*Joel Salminen
+Opiskelijanumero: 0401495
+
+Kääntämiskomento:
+gcc -o 0401495 0401495.c -W -Wall -std=c99*/
 
 
 #include <stdio.h>
@@ -15,6 +18,7 @@ struct node{
 typedef struct node Node;
 
 
+/* Aliohjelmien esittelyt: */
 Node* left_rotate(Node* tree);
 Node* right_rotate(Node* tree);
 Node* read_file(char filename [30], Node* tree);
@@ -30,12 +34,13 @@ void free_memory(Node* tree);
 Node* left_rotate(Node* tree){
 	/* L-rotaatio */
 	Node *temp, *newRoot;
-	temp = tree->ptrLeft->ptrRight; //otetaan vasemman lapsen oikea lapsi talteen temp-muuttujaan
+	temp = tree->ptrLeft->ptrRight; /* otetaan vasemman lapsen oikea lapsi talteen temp-muuttujaan */
 	tree->ptrLeft->ptrRight = NULL;
-	newRoot = tree->ptrLeft; //otetaan vasen lapsi talteen muuttujaan newRoot
-	tree->ptrLeft = temp; //alkuperäisen alipuun juuren vasemmaksi lapseksi temp
-	newRoot->ptrRight = tree; //alkuperäisen alipuun juuri uuden juuren oikeaksi lapseksi
-	// Korjataan solmujen korkeudet: 
+	newRoot = tree->ptrLeft; /* otetaan vasen lapsi talteen muuttujaan newRoot */
+	tree->ptrLeft = temp; /* alkuperäisen alipuun juuren vasemmaksi lapseksi temp */
+	newRoot->ptrRight = tree; /* alkuperäisen alipuun juuri uuden juuren oikeaksi lapseksi */
+
+	/* Korjataan solmujen korkeudet: */
 	tree->height = max(get_height(tree->ptrLeft), get_height(tree->ptrRight)) + 1;
 	newRoot->height = max(get_height(newRoot->ptrLeft), get_height(newRoot->ptrRight)) + 1;
 	return (newRoot);
@@ -50,6 +55,7 @@ Node* right_rotate(Node* tree){
 	newRoot = tree->ptrRight;
 	tree->ptrRight = temp;
 	newRoot->ptrLeft = tree;
+
 	tree->height = max(get_height(tree->ptrLeft), get_height(tree->ptrRight)) + 1;
 	newRoot->height = max(get_height(newRoot->ptrLeft), get_height(newRoot->ptrRight)) + 1;
 	return (newRoot);
@@ -95,7 +101,7 @@ int max(int i, int j){
 
 
 int get_height(Node* tree){
-	/* Laskee puun korkeuden. Palauttaa arvon -1, jos puu on tyhjä. */
+	/* Hakee puun korkeuden. Palauttaa arvon 0, jos puu on tyhjä. */
 	if (tree == NULL)
 		return 0;
 	else
@@ -120,12 +126,12 @@ Node* avl_insert(int i, Node* tree){
 		if(get_height(tree->ptrLeft) == get_height(tree->ptrRight)+ 2){
 			if(i < tree->ptrLeft->key){
 				tree = left_rotate(tree);
-				printf("L\n\n");
+				printf("L-rotaatio\n");
 			}
 			else{
 				tree->ptrLeft = right_rotate(tree->ptrLeft);
 				tree = left_rotate(tree);
-				printf("LR\n\n");
+				printf("LR-rotaatio\n");
 			}
 		}
 	}
@@ -139,13 +145,13 @@ Node* avl_insert(int i, Node* tree){
 			/* R-rotaatio */
 			if (i > tree->ptrRight->key){
 				tree = right_rotate(tree);
-				printf("R\n\n");
+				printf("R-rotaatio\n");
 			}
 			else{
 				/* RL-rotaatio */
 				tree->ptrRight =  left_rotate(tree->ptrRight);
 				tree = right_rotate(tree);
-				printf("RL\n\n");
+				printf("RL-rotaatio\n");
 			}
 		}
 	}
@@ -181,7 +187,9 @@ void get_node(int i, Node *tree){
 
 
 void print_tree(Node* tree, int tabs){
-	/* Tulostaa puurakenteen */
+	/* Tulostaa puurakenteen käänteisessä sisäjärjestyksessä. Puurakenne muodostuu
+	tulostamalla sopiva määrä sisennysmerkkejä ennen jokaista avainarvoa. Parametri 
+	tabs pitää sisällään sisennysmerkkien lukumäärän */
 	int i = tabs;
 	if (tree){
 		print_tree(tree->ptrRight, tabs + 1);
@@ -203,7 +211,6 @@ void free_memory(Node* tree){
 		if (tree->ptrRight != NULL)
 			free_memory(tree->ptrRight);
 		free(tree);
-
 	}
 }
 
@@ -212,13 +219,13 @@ int main (int argc, char *argv[]){
 	Node *root = NULL;
 	int valinta;
 	int i;
-	int j;
 
 	/* Luetaan komentoriviltä tiedostonimi ja tallennetaan tiedostosta löytyvät 
 	kokonaisluvut puuhun. */
 	if (argc > 1){
 		root = read_file(argv[1], root);
 	}
+
 	while (1){
 		printf("\nPäävalikko\n\n");
 		printf("1) Lisää alkio puuhun\n");
@@ -234,14 +241,15 @@ int main (int argc, char *argv[]){
 		}
 		else if (valinta == 2){
 			printf("Anna haettava alkio: ");
-			scanf("%d", &j);
-			get_node(j, root);
+			scanf("%d", &i);
+			get_node(i, root);
 		}
 		else if (valinta == 3){
 			if (root){
 				printf("\n");
 				print_tree(root, 0);
 				printf("\n");
+				printf("%d", root->height);
 			}
 			else {
 				printf("Lisää ensin alkioita puuhun!\n");
@@ -252,7 +260,7 @@ int main (int argc, char *argv[]){
 			break;
 		}
 		else{
-			printf("Anna kelvollinen syöte!\n\n");
+			printf("Anna kelvollinen syöte!\n");
 		}
 	}
 	return 0;
