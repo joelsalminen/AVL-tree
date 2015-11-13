@@ -25,14 +25,14 @@ Node* read_file(char filename [30], Node* tree);
 Node* memory_allocate(Node *ptr);
 int max(int i, int j);
 int get_height(Node* tree);
-Node* avl_insert(int i, Node* tree);
+Node* avl_insert(int k, Node* tree);
 void get_node(int i, Node *tree);
 void print_tree(Node *tree, int tabs);
 void free_memory(Node* tree);
 
 
-Node* left_rotate(Node* tree){
-	/* L-rotaatio */
+Node* right_rotate(Node* tree){
+	/* R-rotaatio */
 	Node *temp, *newRoot;
 	temp = tree->ptrLeft->ptrRight; /* otetaan vasemman lapsen oikea lapsi talteen temp-muuttujaan */
 	tree->ptrLeft->ptrRight = NULL;
@@ -47,8 +47,8 @@ Node* left_rotate(Node* tree){
 }
 
 
-Node* right_rotate(Node* tree){
-	/* R-rotaatio, peilikuva L-rotaatiolle. */
+Node* left_rotate(Node* tree){
+	/* L-rotaatio, peilikuva R-rotaatiolle. */
 	Node *temp, *newRoot;
 	temp = tree->ptrRight->ptrLeft;
 	tree->ptrRight->ptrLeft = NULL;
@@ -109,48 +109,48 @@ int get_height(Node* tree){
 }
 
 
-Node* avl_insert(int i, Node* tree){
+Node* avl_insert(int k, Node* tree){
 	/* Lisää uuden solmun puuhun. */
 	if (tree == NULL){
 		tree = memory_allocate(tree);
-		tree->key = i;
+		tree->key = k;
 		tree->ptrLeft = NULL;
 		tree->ptrRight = NULL;
 	}
 	/* Vasempaan haaraan lisääminen. */
-	else if (tree->key > i){
+	else if (tree->key > k){
 		if (tree->ptrLeft == NULL)
-			printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n", i, tree->key);
-		tree->ptrLeft = avl_insert(i, tree->ptrLeft);
+			printf("Arvo %d asetetaan solmun %d vasemmanpuoleiseksi lapseksi.\n", k, tree->key);
+		tree->ptrLeft = avl_insert(k, tree->ptrLeft);
 		/* tasapainottaminen: */
 		if(get_height(tree->ptrLeft) == get_height(tree->ptrRight)+ 2){
-			if(i < tree->ptrLeft->key){
-				tree = left_rotate(tree);
-				printf("L-rotaatio\n");
+			if(k < tree->ptrLeft->key){
+				tree = right_rotate(tree);
+				printf("R-rotaatio\n");
 			}
 			else{
-				tree->ptrLeft = right_rotate(tree->ptrLeft);
-				tree = left_rotate(tree);
+				tree->ptrLeft = left_rotate(tree->ptrLeft);
+				tree = right_rotate(tree);
 				printf("LR-rotaatio\n");
 			}
 		}
 	}
 	/* Oikeaan haaraan lisääminen */
-	else if (tree->key < i){
+	else if (tree->key < k){
 		if (tree->ptrRight == NULL)
-			printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n", i, tree->key);
-		tree->ptrRight = avl_insert(i, tree->ptrRight);
+			printf("Arvo %d asetetaan solmun %d oikeanpuoleiseksi lapseksi.\n", k, tree->key);
+		tree->ptrRight = avl_insert(k, tree->ptrRight);
 		/* tasapainottaminen: */
 		if (get_height(tree->ptrRight) == get_height(tree->ptrLeft) + 2){
 			/* R-rotaatio */
-			if (i > tree->ptrRight->key){
-				tree = right_rotate(tree);
-				printf("R-rotaatio\n");
+			if (k > tree->ptrRight->key){
+				tree = left_rotate(tree);
+				printf("L-rotaatio\n");
 			}
 			else{
 				/* RL-rotaatio */
-				tree->ptrRight =  left_rotate(tree->ptrRight);
-				tree = right_rotate(tree);
+				tree->ptrRight =  right_rotate(tree->ptrRight);
+				tree = left_rotate(tree);
 				printf("RL-rotaatio\n");
 			}
 		}
@@ -249,7 +249,6 @@ int main (int argc, char *argv[]){
 				printf("\n");
 				print_tree(root, 0);
 				printf("\n");
-				printf("%d", root->height);
 			}
 			else {
 				printf("Lisää ensin alkioita puuhun!\n");
